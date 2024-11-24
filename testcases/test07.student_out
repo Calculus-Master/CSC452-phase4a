@@ -1,0 +1,53 @@
+phase5_start_service_processes() called -- currently a NOP
+start4(): Spawn 4 children. Each child writes one line to each terminal
+start4(): calling Wait four times
+Child(0): started
+Child(0): done with write #0
+
+ ***** Child(0): got bad result or bad size! *****
+
+Child(0): done with write #1
+Child(0): done with write #2
+
+ ***** Child(0): got bad result or bad size! *****
+
+Child(0): done with write #3
+Child(0): terminating
+Child(1): started
+Child(1): done with write #0
+
+ ***** Child(1): got bad result or bad size! *****
+
+Child(1): done with write #1
+Child(1): done with write #2
+
+ ***** Child(1): got bad result or bad size! *****
+
+Child(1): done with write #3
+Child(1): terminating
+Child(2): started
+Child(2): done with write #0
+
+ ***** Child(2): got bad result or bad size! *****
+
+Child(2): done with write #1
+Child(2): done with write #2
+
+ ***** Child(2): got bad result or bad size! *****
+
+Child(2): done with write #3
+Child(2): terminating
+Child(3): started
+Child(3): done with write #0
+
+ ***** Child(3): got bad result or bad size! *****
+
+Child(3): done with write #1
+Child(3): done with write #2
+
+ ***** Child(3): got bad result or bad size! *****
+
+Child(3): done with write #3
+Child(3): terminating
+start4(): calling Terminate
+finish(): The simulation is now terminating.

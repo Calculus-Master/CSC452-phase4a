@@ -1,0 +1,5 @@
+phase5_start_service_processes() called -- currently a NOP
+start4(): 3 tests of invalid requests from terminals
+start4(): Read negative number of chars from term 1
+test04: testcases/test04.c:30: start4: Assertion `result == -1' failed.
+./run_testcases.student: line 37: 22828 Aborted                 ./$line -R

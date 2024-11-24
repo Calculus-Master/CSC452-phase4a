@@ -1,0 +1,46 @@
+phase5_start_service_processes() called -- currently a NOP
+start4(): Spawn one child.
+Child0(): start
+Child0(): buffer read from term0   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+ ***** Child(0): got bad result = -1 or bad size = 80! *****
+
+ Child0(): buffer read from term0   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+ ***** Child(0): got bad result = -1 or bad size = 80! *****
+
+ Child0(): buffer read from term0   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+ ***** Child(0): got bad result = -1 or bad size = 80! *****
+
+ Child0(): buffer read from term0   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+ ***** Child(0): got bad result = -1 or bad size = 80! *****
+
+ Child0(): buffer read from term0   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+ ***** Child(0): got bad result = -1 or bad size = 80! *****
+
+ Child0(): buffer read from term0   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+ ***** Child(0): got bad result = -1 or bad size = 80! *****
+
+ Child0(): buffer read from term0   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+ ***** Child(0): got bad result = -1 or bad size = 80! *****
+
+ Child0(): buffer read from term0   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+ ***** Child(0): got bad result = -1 or bad size = 80! *****
+
+ Child0(): buffer read from term0   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+ ***** Child(0): got bad result = -1 or bad size = 80! *****
+
+ Child0(): buffer read from term0   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+ ***** Child(0): got bad result = -1 or bad size = 80! *****
+
+ Child0(): done
+start4(): done.
+finish(): The simulation is now terminating.

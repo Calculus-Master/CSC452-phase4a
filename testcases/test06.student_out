@@ -1,0 +1,8 @@
+phase5_start_service_processes() called -- currently a NOP
+start4(): Spawn two children. Child1 writes one line to terminal 1. Child2 reads one line from terminal 1.
+Child1(): Terminating
+Child2(): read 80 characters from terminal 1
+Child2(): read ''
+Child2(): Terminating
+start4(): done.
+finish(): The simulation is now terminating.
