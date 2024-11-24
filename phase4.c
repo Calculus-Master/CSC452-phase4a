@@ -6,3 +6,8 @@ void phase4_init()
 {
 
 }
+
+void phase4_start_service_processes()
+{
+
+}

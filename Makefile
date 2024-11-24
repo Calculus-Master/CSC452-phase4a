@@ -1,4 +1,4 @@
-PREFIX = ../..
+PREFIX = /home/vagrant
 
 CC = gcc
 
