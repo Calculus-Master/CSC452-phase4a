@@ -5,12 +5,8 @@ start4(): Spawn four children.  Each child reads fm a different
 start4(): Spawn four children.  Each child writes to a different
           terminal.
 Child0(): start
-Child0(): read ''
 Child1(): start
-Child1(): read ''
 Child2(): start
-Child2(): read ''
 Child3(): start
-Child3(): read ''
-start4(): done.
+TESTCASE TIMED OUT!!!
 finish(): The simulation is now terminating.

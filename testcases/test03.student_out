@@ -2,9 +2,5 @@ phase5_start_service_processes() called -- currently a NOP
 start4(): started
 XXterm2(): started
 XXterm2(): reading a line from terminal 2
-XXterm2(): after TermRead()
-XXterm2(): term2 read   80 bytes (hex):  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-                 strlen 0 buf  (text): ''
-XXterm2(): Terminating
-start4(): XXterm2 completed. kidpid = 7, pid = 7
+TESTCASE TIMED OUT!!!
 finish(): The simulation is now terminating.

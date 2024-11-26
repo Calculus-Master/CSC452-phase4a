@@ -101,14 +101,70 @@ void sleep_handler(USLOSS_Sysargs* args)
     }
 }
 
-void term_read_handler(USLOSS_Sysargs* args)
-{
+void term_read_handler(USLOSS_Sysargs* args) {
+    int unit = (int)(long)args->arg3; // Terminal number
+    char *buffer = (char *)args->arg1; // User buffer
+    int bufSize = (int)(long)args->arg2; // Buffer size
 
+    if (unit < 0 || unit >= USLOSS_TERM_UNITS || buffer == NULL || bufSize <= 0) {
+        args->arg4 = (void *)-1; // Invalid arguments
+        return;
+    }
+
+    // Wait for a line to be available
+    int status;
+    waitDevice(USLOSS_TERM_DEV, unit, &status);
+
+    // Check status register for available input
+    if (USLOSS_TERM_STAT_RECV(status) == USLOSS_DEV_BUSY) {
+        // Read character
+        char c = USLOSS_TERM_STAT_CHAR(status);
+        static char lineBuffer[MAXLINE];
+        static int lineIndex = 0;
+
+        lineBuffer[lineIndex++] = c;
+
+        // Handle newline or buffer full
+        if (c == '\n' || lineIndex >= MAXLINE) {
+            strncpy(buffer, lineBuffer, bufSize);
+            args->arg2 = (void *)(long)lineIndex; // Characters read
+            lineIndex = 0; // Reset buffer
+        } else {
+            // Wait for more input
+            blockMe();
+        }
+    }
+
+    args->arg4 = (void *)0; // Success
 }
 
-void term_write_handler(USLOSS_Sysargs* args)
-{
+void term_write_handler(USLOSS_Sysargs* args) {
+    int unit = (int)(long)args->arg3; // Terminal number
+    char *buffer = (char *)args->arg1; // User buffer
+    int bufSize = (int)(long)args->arg2; // Buffer size
 
+    if (unit < 0 || unit >= USLOSS_TERM_UNITS || buffer == NULL || bufSize <= 0) {
+        args->arg4 = (void *)-1; // Invalid arguments
+        return;
+    }
+
+    for (int i = 0; i < bufSize; i++) {
+        int status;
+        waitDevice(USLOSS_TERM_DEV, unit, &status);
+
+        // Check if terminal is ready for output
+        if (USLOSS_TERM_STAT_XMIT(status) == USLOSS_DEV_READY) {
+            // Write character
+            int control = 0x1 | (buffer[i] << 8); // Send char
+            USLOSS_DeviceOutput(USLOSS_TERM_DEV, unit, (void *)(long)control);
+        } else {
+            // Terminal not ready, block and retry
+            blockMe();
+        }
+    }
+
+    args->arg2 = (void *)(long)bufSize; // Characters written
+    args->arg4 = (void *)0; // Success
 }
 
 // Phase 4 Functions

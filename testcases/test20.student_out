@@ -3,6 +3,16 @@ start4(): Spawn eight children.
           4 write 5 lines to a diff terminal.
           4 read 5 lines to a diff terminal.
 Child0(): start
-Child0(): read ERROR: ReadTeam
-test20: phase1.c:509: quit: Assertion `0 <= status && status <= 255' failed.
-./run_testcases.student: line 37: 23243 Aborted                 ./$line -R
+Child_20(): start
+Child_20(): writing to term0
+Child1(): start
+Child_21(): start
+Child_21(): writing to term1
+Child2(): start
+Child_22(): start
+Child_22(): writing to term2
+Child3(): start
+Child_23(): start
+Child_23(): writing to term3
+TESTCASE TIMED OUT!!!
+finish(): The simulation is now terminating.
