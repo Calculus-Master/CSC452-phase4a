@@ -27,7 +27,7 @@ uname -v = #1 SMP Debian 5.10.221-1 (2024-07-14)
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
-PATH: /home/vagrant/.vscode-server/cli/servers/Stable-f1a4fb101478ce6ec82fe9627c43efbf9e98c813/server/bin/remote-cli
+PATH: /home/vagrant/bin
 PATH: /usr/local/bin
 PATH: /usr/bin
 PATH: /bin

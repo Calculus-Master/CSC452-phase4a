@@ -6,3 +6,7 @@ start4(): Read zero chars from term 0
 start4(): After reading 0 characters from terminal 0, bBuffer contains 'abcdefghijklm'
 start4(): Done with test of illegal terminal parameters
 finish(): The simulation is now terminating.
+----- term0.out -----
+----- term1.out -----
+----- term2.out -----
+----- term3.out -----
