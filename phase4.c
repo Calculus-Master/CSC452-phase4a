@@ -25,17 +25,14 @@ typedef struct TerminalData {
     int read_semaphore_id; // Semaphore lock for terminal read operations
     char working_buffer[MAXLINE + 1]; // Current working buffer
     int working_buffer_index; // Index of first free space in working buffer
-    int deliver_size; // Size of the target buffer to read into
     int is_reading; // Flag to indicate if a read is in progress
 
     // Writing
     int write_semaphore_id; // Semaphore lock for terminal write operations
-    int daemon_mutex;
+    int daemon_mutex; // Mutex between daemon writing and the syscall TermWrite
     int write_mbox_id; // Holds characters to be written to terminal
-    int has_char; // Flag to indicate if a character is ready to be written
-
-    char write_buffer[MAXLINE + 1];
-    int write_buffer_index;
+    char write_buffer[MAXLINE + 1]; // Buffer for characters waiting to be written to terminal
+    int write_buffer_index; // Index of the next character waiting to be written
     int is_writing; // Flag to indicate if a write is in progress
 } TerminalData;
 
@@ -43,12 +40,14 @@ TerminalData terminal_data[USLOSS_TERM_UNITS];
 
 // Helper Functions
 
+// Clears the working read buffer for the specified terminal
 void clear_working_buffer(TerminalData* data)
 {
     memset(data->working_buffer, 0, MAXLINE + 1);
     data->working_buffer_index = 0;
 }
 
+// Enables read interrupts for the specified terminal
 void enable_terminal_reads(int unit)
 {
     int control = 0; // Make sure 'send char' is off (not sending any data)
@@ -57,6 +56,7 @@ void enable_terminal_reads(int unit)
     USLOSS_DeviceOutput(USLOSS_TERM_DEV, unit, (void*)(long)control);
 }
 
+// Enables write interrupts for the specified terminal (DOES NOT SEND A CHARACTER)
 void enable_terminal_writes(int unit)
 {
     int control = 0; // Make sure 'send char' is off (not sending any data)
@@ -66,16 +66,7 @@ void enable_terminal_writes(int unit)
     USLOSS_DeviceOutput(USLOSS_TERM_DEV, unit, (void*)(long)control);
 }
 
-void disable_terminal_writes(int unit, int is_reading)
-{
-    int control = 0; // Make sure 'send char' is off (not sending any data)
-
-    if(is_reading)
-        control |= 0x2; // Turn on read interrupt
-
-    USLOSS_DeviceOutput(USLOSS_TERM_DEV, unit, (void*)(long)control);
-}
-
+// Writes a single character to the specified terminal, turning on the valid bits (as stated in Terminal supplement)
 void write_terminal_character(int unit, char c)
 {
     int control = 0x1; // Turn on 'send char'
@@ -86,12 +77,7 @@ void write_terminal_character(int unit, char c)
     USLOSS_DeviceOutput(USLOSS_TERM_DEV, unit, (void*)(long)control);
 }
 
-void disable_terminal(int unit)
-{
-    int control = 0;
-    USLOSS_DeviceOutput(USLOSS_TERM_DEV, unit, (void*)(long)control);
-}
-
+// Device driver for sleeping processes, handles clock interrupts continuously
 int sleep_daemon_process()
 {
     while(1)
@@ -131,6 +117,7 @@ int sleep_daemon_process()
     return 0; // Should never reach this point
 }
 
+// Device driver for a terminal, handles Read and Write interrupts continuously
 int terminal_daemon_process(void* arg)
 {
     int unit = (int)(long)arg;
@@ -165,13 +152,6 @@ int terminal_daemon_process(void* arg)
             if(c == 0 || c == '\n' || term->working_buffer_index == MAXLINE)
             {
                 term->working_buffer[term->working_buffer_index] = '\0';
-
-//                char temp[MAXLINE];
-//                memset(temp, 0, MAXLINE);
-//
-//                strcpy(temp, term->working_buffer);
-//                clear_working_buffer(term);
-//                term->is_reading = 0;
 
                 // Send the line to the mailbox (if mailbox is full, it gets deleted)
                 MboxCondSend(term->read_mbox_id, term->working_buffer, strlen(term->working_buffer));
@@ -219,6 +199,7 @@ int terminal_daemon_process(void* arg)
 
 // Syscall Handlers
 
+// Handles the sleep syscall
 void sleep_handler(USLOSS_Sysargs* args)
 {
     int seconds = (int)(long)args->arg1;
@@ -254,6 +235,7 @@ void sleep_handler(USLOSS_Sysargs* args)
     }
 }
 
+// Handles the TermRead syscall
 void term_read_handler(USLOSS_Sysargs* args)
 {
     int unit = (int)(long)args->arg3; // Terminal number
@@ -268,25 +250,26 @@ void term_read_handler(USLOSS_Sysargs* args)
     }
 
     TerminalData* term = &terminal_data[unit];
-
-    term->deliver_size = bufSize;
     term->is_reading = 1;
 
+    // Create a temporary buffer to receive the terminal message
     char temp[MAXLINE + 1];
     memset(temp, 0, MAXLINE + 1);
+
     // Reads the first available line, or blocks until the daemon process sends a line
     int length = MboxRecv(term->read_mbox_id, temp, MAXLINE);
 
+    // Copy the message to the user buffer, truncating if needed
     strncpy(buffer, temp, bufSize);
 
     if(bufSize < length)
         length = bufSize;
 
-    //buffer[bufSize] = '\0'; // Null terminate the buffer
     args->arg2 = (void *)(long) length; // Characters read
     args->arg4 = (void *)0; // Success
 }
 
+// Handles the TermWrite syscall
 void term_write_handler(USLOSS_Sysargs* args)
 {
     int unit = (int)(long)args->arg3; // Terminal number
@@ -325,6 +308,7 @@ void term_write_handler(USLOSS_Sysargs* args)
 
 // Phase 4 Functions
 
+// Sets up data structures and objects for stuff in Phase 4
 void phase4_init()
 {
     // Setup sleeping process structs
@@ -365,6 +349,7 @@ void phase4_init()
     }
 }
 
+// Sporks the daemons (device drivers) for Phase 4
 void phase4_start_service_processes()
 {
     spork("Sleep Daemon", sleep_daemon_process, NULL, USLOSS_MIN_STACK, 1);
